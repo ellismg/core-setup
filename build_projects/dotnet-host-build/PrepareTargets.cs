@@ -178,7 +178,7 @@ namespace Microsoft.DotNet.Host.Build
             int iPatch = int.Parse(branchInfo.Entries["PATCH_VERSION"]);
             string sReleaseSuffix = branchInfo.Entries["RELEASE_SUFFIX"];
             bool fStabilizePackageVersion = bool.Parse(branchInfo.Entries["STABILIZE_PACKAGE_VERSION"]);
-            bool fLockHostVersion = bool.Parse(branchInfo.Entries["LOCK_HOST_VERSION"]);
+            bool fLockHostVersion = EnvVars.VerticalBuild ? false : bool.Parse(branchInfo.Entries["LOCK_HOST_VERSION"]);
 
             var hostVersion = new HostVersion()
             {

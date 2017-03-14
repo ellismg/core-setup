@@ -38,7 +38,7 @@ namespace Microsoft.DotNet.Cli.Build
             string rid = Environment.GetEnvironmentVariable("TARGETRID") ?? RuntimeEnvironment.GetRuntimeIdentifier();
 
             // Look for expected RIDs, including Portable one, for Linux
-            if (rid.StartsWith("linux-") || rid == "ubuntu.16.04-x64" || rid == "ubuntu.16.04-arm" || rid == "ubuntu.16.10-x64" || rid == "fedora.23-x64" || rid == "fedora.24-x64" || rid == "opensuse.42.1-x64" || rid == "debian.8-armel" || rid == "tizen.4.0.0-armel")
+            if (EnvVars.VerticalBuild || rid.StartsWith("linux-") || rid == "ubuntu.16.04-x64" || rid == "ubuntu.16.04-arm" || rid == "ubuntu.16.10-x64" || rid == "fedora.23-x64" || rid == "fedora.24-x64" || rid == "opensuse.42.1-x64" || rid == "debian.8-armel" || rid == "tizen.4.0.0-armel")
             {
                 return $"{artifactPrefix}-{rid}.{version}";
             }

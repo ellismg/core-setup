@@ -96,7 +96,7 @@ namespace Microsoft.DotNet.Cli.Build.Framework
         {
             get
             {
-                return IsUbuntu || IsCentOS || IsRHEL || IsDebian || IsFedora || IsOpenSUSE;
+                return RuntimeEnvironment.OperatingSystemPlatform == Platform.Linux
             }
         }
 

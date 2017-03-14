@@ -27,11 +27,15 @@
       <OSGroup>Windows_NT</OSGroup>
       <Platform>arm64</Platform>
     </Project>
-    <Project Condition="'$(TargetsLinux)' == 'true' and ('$(DistroRid)' =='linux-x64')" Include="linux/Microsoft.NETCore.DotNetHost.pkgproj">
+    <Project Condition="'$(TargetsLinux)' == 'true' and '$(DistroRid)' == 'linux-x64'" Include="linux/Microsoft.NETCore.DotNetHost.pkgproj">
       <OSGroup>Linux</OSGroup>
       <Platform>amd64</Platform>
     </Project>
-    <Project Condition="'$(TargetsLinux)' == 'true' and ('$(DistroRid)' =='centos.7-x64' or $(DistroRid.StartsWith('rhel.7')))" Include="rhel/Microsoft.NETCore.DotNetHost.pkgproj">
+    <Project Condition="'$(TargetsLinux)' == 'true' and '$(DistroRid)' == 'rhel.7-x64'" Include="rhel/Microsoft.NETCore.DotNetHost.pkgproj">
+      <OSGroup>Linux</OSGroup>
+      <Platform>amd64</Platform>
+    </Project>
+    <Project Condition="'$(TargetsLinux)' == 'true' and '$(DistroRid)' == 'centos.7-x64'" Include="centos.7/Microsoft.NETCore.DotNetHost.pkgproj">
       <OSGroup>Linux</OSGroup>
       <Platform>amd64</Platform>
     </Project>

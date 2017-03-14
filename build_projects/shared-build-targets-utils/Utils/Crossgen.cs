@@ -162,7 +162,7 @@ namespace Microsoft.DotNet.Cli.Build
             {
                 rid = "osx.10.10-x64";
             }
-            else if (CurrentPlatform.IsCentOS || CurrentPlatform.IsRHEL)
+            else if (!EnvVars.VirticalBuild && (CurrentPlatform.IsCentOS || CurrentPlatform.IsRHEL))
             {
                 // CentOS runtime is in the runtime.rhel.7-x64... package as are all
                 // versions of RHEL

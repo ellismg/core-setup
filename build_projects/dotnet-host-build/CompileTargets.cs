@@ -389,7 +389,15 @@ namespace Microsoft.DotNet.Host.Build
             var hostNugetversion = hostVersion.LatestHostVersion.ToString();
             var content = $@"{c.BuildContext["CommitHash"]}{Environment.NewLine}{hostNugetversion}{Environment.NewLine}";
             var pkgDir = Path.Combine(c.BuildContext.BuildDirectory, "pkg");
-            string rid = HostPackageSupportedRids[c.BuildContext.Get<string>("TargetRID")];
+            string rid = c.BuildContext.Get<string>("TargetRID");
+
+            // On non vertical builds, we may use a different RID for packaging so we need to use our
+            // table above to map the host rid to the rid we want to package for.
+            if (!EnvVars.VerticalBuild)
+            {
+                rid = HostPackageSupportedRids[rid];
+            }
+
             File.WriteAllText(Path.Combine(pkgDir, "version.txt"), content);
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -432,7 +440,13 @@ namespace Microsoft.DotNet.Host.Build
         {
             var hostVersion = c.BuildContext.Get<HostVersion>("HostVersion");
             var lockedHostFxrVersion = hostVersion.LockedHostFxrVersion.ToString();
-            string currentRid = HostPackageSupportedRids[c.BuildContext.Get<string>("TargetRID")];
+            string currentRid = c.BuildContext.Get<string>("TargetRID");
+
+            if (!EnvVars.VerticalBuild)
+            {
+                currentRid = HostPackageSupportedRids[currentRid];
+            }
+
             string framework = c.BuildContext.Get<string>("TargetFramework");
 
             string projectJson = $@"{{

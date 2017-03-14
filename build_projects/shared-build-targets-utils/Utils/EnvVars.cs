@@ -9,6 +9,8 @@ namespace Microsoft.DotNet.Cli.Build
 
         public static readonly bool Signed = GetBool("SIGNED_PACKAGES");
 
+        public static readonly bool VerticalBuild = GetBool("DOTNET_VERTICAL_BUILD");
+
         private static bool GetBool(string name, bool defaultValue = false)
         {
             var str = Environment.GetEnvironmentVariable(name);
