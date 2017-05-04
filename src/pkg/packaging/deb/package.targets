@@ -85,8 +85,8 @@
       <SHManpages Include="$(ManPagesDir)/**/*" />
     </ItemGroup>
 
-    <Copy SourceFiles="@(SHFiles)" DestinationFolder="$(debLayoutPackageRoot)"/>
-    <Copy SourceFiles="@(SHManpages)" DestinationFolder="$(debLayoutDocs)"/>
+    <Copy SourceFiles="@(SHFiles)" DestinationFiles="@(SHFiles->'$(debLayoutPackageRoot)/%(RecursiveDir)%(Filename)%(Extension)')"/>
+    <Copy SourceFiles="@(SHManpages)" DestinationFiles="@(SHManpages->'$(debLayoutDocs)/%(RecirsiveDir)%(Filename)%(Extension)')"/>
 
     <!-- Replace config json variables -->
     <ItemGroup>
@@ -153,7 +153,7 @@
       <HFFiles Include="$(InputRoot)/**/*" />
     </ItemGroup>
 
-    <Copy SourceFiles="@(HFFiles)" DestinationFolder="$(debLayoutPackageRoot)"/>
+    <Copy SourceFiles="@(HFFiles)" DestinationFiles="@(HFFiles->'$(debLayoutPackageRoot)/%(RecursiveDir)%(Filename)%(Extension)')"/>
 
     <!-- Replace config json variables -->
     <ItemGroup>
@@ -198,7 +198,7 @@
     <PropertyGroup>
       <DebPackageName>$(SharedFxDebPkgName)</DebPackageName>
       <DebPackageVersion>$(HostVersion)</DebPackageVersion>
-      <InputRoot>$(SharedHostPublishRoot)</InputRoot>
+      <InputRoot>$(SharedFrameworkPublishRoot)</InputRoot>
       <DebFile>$(SharedFrameworkInstallerFile)</DebFile>
       <ConfigJsonName>dotnet-sharedframework-debian_config.json</ConfigJsonName>
       <ConfigJsonFile>$(debPackaginfConfigPath)$(ConfigJsonName)</ConfigJsonFile>
@@ -216,6 +216,12 @@
     <RemoveDir Condition="Exists('$(debIntermediatesDir)')" Directories="$(debIntermediatesDir)" />
     <MakeDir Directories="$(debIntermediatesDir)" />
 
+    <!-- Compute ICU Version -->
+    <Exec Command="apt-cache search --names-only '^libicu[0-9]+$' | cut -d' ' -f1"
+          ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="LibIcuPackageName" />
+    </Exec>
+
     <!-- Create empty debian layout -->
     <RemoveDir Condition="Exists('$(debLayoutDirectory)')" Directories="$(debLayoutDirectory)" />
     <MakeDir Directories="$(debLayoutDirectory)" />
@@ -226,12 +232,10 @@
 
     <!-- Copy files to debian layout -->
     <ItemGroup>
-      <SHFiles Include="$(InputRoot)/**/*" />
-      <SHManpages Include="$(ManPagesDir)/**/*" />
+      <SFFiles Include="$(InputRoot)/**/*" />
     </ItemGroup>
 
-    <Copy SourceFiles="@(SHFiles)" DestinationFolder="$(debLayoutPackageRoot)"/>
-    <Copy SourceFiles="@(SHManpages)" DestinationFolder="$(debLayoutDocs)"/>
+    <Copy SourceFiles="@(SFFiles)" DestinationFiles="@(SFFiles->'$(debLayoutPackageRoot)/%(RecursiveDir)%(Filename)%(Extension)')"/>
 
     <!-- Replace config json variables -->
     <ItemGroup>
@@ -249,6 +253,9 @@
       </SharedFrameworkTokenValue>
       <SharedFrameworkTokenValue Include="%SHARED_FRAMEWORK_BRAND_NAME%">
         <ReplacementString>$(SharedFrameworkBrandName)</ReplacementString>
+      </SharedFrameworkTokenValue>
+      <SharedFrameworkTokenValue Include="%LIBICU_PACKAGE_NAME%">
+        <ReplacementString>$(LibIcuPackageName)</ReplacementString>
       </SharedFrameworkTokenValue>
     </ItemGroup>
 
